@@ -9,13 +9,16 @@ public class GameManager: MonoBehaviour
 	private bool death;
 	public GUIStyle guiStyle;
 	public string NextLevel;
+	//PBO - 27/10/2013 - Score en point
+	public int score = 0;
+	//PBO - 27/10/2013 - Energie comprise entre 0 et 100. La partie est perdue lorsque l'énergie atteint l'une de ses valeurs limite, elle diminue au cours du temps et augmente quand on mange
+	public float energy = 50.0f;
+	public Texture2D EnergyBar;
 	
-	public int totalCoin;
-	public int foundCoin;
 	
 	public AudioClip DestroySound;
 	public AudioClip WonSound;
-	public AudioClip CoinSound;
+	public AudioClip EatSound;
 	public AudioClip SpeedBoosterSound;
 	public AudioClip JumpBoosterSound;
 	public AudioClip TeleporterSound;
@@ -24,18 +27,12 @@ public class GameManager: MonoBehaviour
 	
 	void Start () 
 	{
-		Time.timeScale = 1.0f;
-		totalCoin = GameObject.FindGameObjectsWithTag("Coin").Length;
-		Door = GameObject.Find("Door");
-		sound = GetComponent<AudioSource>();
 	}
 	
-	void Updata()
+	void Update()
 	{
-		if (Input.GetKey (KeyCode.X))
-		{
-			Application.LoadLevel("Main_Menu");
-		}
+		//PBO - 27/10/2013 - L'énergie diminue au cours du temps
+		energy -= 0.015f;
 	}
 	
 	void OnGUI () 
@@ -74,20 +71,37 @@ public class GameManager: MonoBehaviour
 				Application.LoadLevel("Main_Menu");
 			}
 		}
-		GUI.Label(new Rect(10, 10, 500, 20), "Found Coins: "+foundCoin+"/"+totalCoin, guiStyle);
+		
+		//PBO - 27/10/2013 - On stocke l'énergie avec un maximum de 100 pour éviter que la barre ne sorte du cadre
+		float tempEnergy = Mathf.Min(100.0f,energy);
+		//PBO - 27/10/2013 - Affichage score
+		((GUIText)GameObject.Find("Score").GetComponent("GUIText")).text = "Score : " + score;
+		//PBO - 27/10/2013 - Affichage énergie (Taille barre + couleur)
+		((GUITexture)GameObject.Find("Energy").GetComponent("GUITexture")).transform.localScale = new Vector3(0.3f * (float)tempEnergy / 100,0.059f,0);
+		((GUITexture)GameObject.Find("Energy").GetComponent("GUITexture")).transform.localPosition = new Vector3(0.501f - 0.3f * ( 100 - (float)tempEnergy ) / 200 ,0.96f,0.0f);
+		
+		
+		if(Mathf.Abs((int)energy - 50) > 40){
+			((GUITexture)GameObject.Find("Energy").GetComponent("GUITexture")).color = Color.red;
+		}
+		else if(Mathf.Abs((int)energy - 50) > 10){
+			((GUITexture)GameObject.Find("Energy").GetComponent("GUITexture")).color = Color.yellow;
+		}
+		else{
+			((GUITexture)GameObject.Find("Energy").GetComponent("GUITexture")).color = Color.green;
+		}
 	}
 	
-	public void FoundCoin()
-    {
-		audio.clip = CoinSound;
+	//PBO - 27/10/2013 - A appeler lorsqu'on mange de la nourriture, augmente le score et l'énergie
+	public void Eat(float energy,int score){
+		this.score += score;
+		this.energy += energy;
+		audio.clip = EatSound;
 		audio.Play();
-        foundCoin++;
 		
-        if (foundCoin >= totalCoin)
-        {
-            Door.GetComponent<Door>().FindAllCoin = true;
-        }
-    }
+	}
+	
+
 	
 	public void SpeedBooster()
     {

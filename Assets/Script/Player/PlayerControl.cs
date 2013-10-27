@@ -14,11 +14,18 @@ public class PlayerControl : MonoBehaviour
 	void Start()
 	{
 		moveJoy = GameObject.Find("LeftJoystick");
-		_GameManager = GameObject.Find("_GameManager");
+		_GameManager = GameObject.Find("GameManager");
 	}
 	
 	void Update () 
 	{	
+		
+		//PBO - 27/10/2013 - L'energie va influer sur la vitesse de déplacement
+		moveSpeed = 24.0f * (90 - (Mathf.Abs((int)(_GameManager.GetComponent<GameManager>().energy) - 50) - 10)) / 100;
+		if(_GameManager.GetComponent<GameManager>().energy > 100 || _GameManager.GetComponent<GameManager>().energy < 0){		
+			_GameManager.GetComponent<GameManager>().Death();	
+			Destroy(gameObject);
+		}
 		Vector3 forward = Camera.main.transform.TransformDirection(Vector3.forward);
 		forward.y = 0;
 		forward = forward.normalized;
@@ -59,18 +66,14 @@ public class PlayerControl : MonoBehaviour
 		}
 	}
 	
-	void OnTriggerEnter(Collider other) 
+	void OnTriggerExit(Collider other) 
 	{
 		if (other.tag == "Destroy")
 		{
 			_GameManager.GetComponent<GameManager>().Death();
 			Destroy(gameObject);
 		}
-		else if (other.tag == "Coin")
-		{
-			Destroy(other.gameObject);
-			_GameManager.GetComponent<GameManager>().FoundCoin();
-		}
+		
 		else if (other.tag == "SpeedBooster")
 		{
 			movement = new Vector3(0,0,0);
@@ -86,16 +89,15 @@ public class PlayerControl : MonoBehaviour
 			movement = new Vector3(0,0,0);
 			_GameManager.GetComponent<GameManager>().Teleporter();
 		}
-    }
-	
-	void OnCollisionEnter(Collision collision)
-	{
-		if (!canJump)
+		else if (other.tag == "Hamburger")
 		{
-			canJump = true;
-			_GameManager.GetComponent<GameManager>().BallHitGround();
+				Destroy(other.gameObject);
+				_GameManager.GetComponent<GameManager>().Eat(10,200);
+		
 		}
     }
+	
+	
 	
 	void OnGUI()
 	{
