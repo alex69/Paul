@@ -25,6 +25,15 @@ public class GameManager: MonoBehaviour
 	public AudioClip BallJumpSound;
 	public AudioClip BallHitGroundSound;
 	
+	enum GameState
+	{
+		Start,
+		Game,
+		Pause,
+		End,
+		Switch
+	}
+	
 	void Start () 
 	{
 	}
