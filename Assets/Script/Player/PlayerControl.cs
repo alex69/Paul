@@ -13,6 +13,7 @@ public class PlayerControl : MonoBehaviour
 	
 	void Start()
 	{
+		// Here start the player control
 		moveJoy = GameObject.Find("LeftJoystick");
 		_GameManager = GameObject.Find("GameManager");
 	}
