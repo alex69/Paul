@@ -20,7 +20,7 @@ public class PlayerControl : MonoBehaviour
 	void Update () 
 	{	
 		
-		//PBO - 27/10/2013 - L'energie va influer sur la vitesse de déplacement
+		//PBO - 27/10/2013 - L'energie va influer sur la vites
 		moveSpeed = 24.0f * (90 - (Mathf.Abs((int)(_GameManager.GetComponent<GameManager>().energy) - 50) - 10)) / 100;
 		if(_GameManager.GetComponent<GameManager>().energy > 100 || _GameManager.GetComponent<GameManager>().energy < 0){		
 			_GameManager.GetComponent<GameManager>().Death();	
@@ -66,7 +66,7 @@ public class PlayerControl : MonoBehaviour
 		}
 	}
 	
-	void OnTriggerExit(Collider other) 
+	void OnTriggerEnter(Collider other) 
 	{
 		if (other.tag == "Destroy")
 		{
@@ -95,13 +95,19 @@ public class PlayerControl : MonoBehaviour
 				_GameManager.GetComponent<GameManager>().Eat(10,200);
 		
 		}
+		else if (other.tag == "Car")
+		{
+				rigidbody.angularVelocity = new Vector3(-rigidbody.angularVelocity.x,-rigidbody.angularVelocity.y,-rigidbody.angularVelocity.z);
+				rigidbody.velocity = new Vector3(-rigidbody.velocity.x,-rigidbody.velocity.y,-rigidbody.velocity.z);
+		
+		}
     }
 	
 	
 	
 	void OnGUI()
 	{
-		GUI.Label(new Rect(300,10,100,100),"X: " + moveJoy.GetComponent<Joystick>().position.x.ToString());
-		GUI.Label(new Rect(300,30,100,100),"Y: " + moveJoy.GetComponent<Joystick>().position.y.ToString());
+		//GUI.Label(new Rect(300,10,100,100),"X: " + moveJoy.GetComponent<Joystick>().position.x.ToString());
+		//GUI.Label(new Rect(300,30,100,100),"Y: " + moveJoy.GetComponent<Joystick>().position.y.ToString());
 	}
 }
