@@ -72,8 +72,8 @@ public class GameManager: MonoBehaviour
 			}
 		}
 		
-		//PBO - 27/10/2013 - On stocke l'énergie avec un maximum de 100 pour éviter que la barre ne sorte du cadre
-		float tempEnergy = Mathf.Min(100.0f,energy);
+		//PBO - 27/10/2013 - On stocke l'énergie avec une valeur entre 0 et 100 pour éviter que la barre ne sorte du cadre
+		float tempEnergy = Mathf.Max (0.0f,Mathf.Min(100.0f,energy));
 		//PBO - 27/10/2013 - Affichage score
 		((GUIText)GameObject.Find("Score").GetComponent("GUIText")).text = "Score : " + score;
 		//PBO - 27/10/2013 - Affichage énergie (Taille barre + couleur)
