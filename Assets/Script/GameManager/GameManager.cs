@@ -34,6 +34,7 @@ public class GameManager: MonoBehaviour
 	
 	//PBO - 30/10/2013 - Gestion de l'interface de tutorial
 	public GUIText tutorialText;
+	public float lineLength;
 	public GUITexture tutorialWindow;	
 	private bool isFading;
 	private int increment;
@@ -49,12 +50,83 @@ public class GameManager: MonoBehaviour
 		increment = -50;
 	}
 	
+	public void ShowMessage (GUIText guiText,string text) {
+
+ 
+    int numberOfLines = 0;
+    var words = text.Split(" "[0]); //Split the string into seperate words
+    string result = "";
+
+ 
+
+    for( var index = 0; index < words.Length; index++) {
+
+ 
+
+       string word = words[index].Trim();
+
+   
+
+       if (index == 0) {
+
+          result = words[0];
+
+          guiText.text = result;
+
+       }
+
+ 
+
+       if (index > 0 ) {
+
+ 
+
+         result += " " + word;
+
+ 
+
+          guiText.text = result;
+
+   }
+
+ 
+
+     var TextSize = guiText.GetScreenRect();
+
+   
+
+      if (TextSize.width > lineLength)
+
+      {
+
+          //remover
+
+          result = result.Substring(0,result.Length-(word.Length));
+
+       
+
+          result += "\n" + word;
+
+
+          guiText.text = result;
+
+      }
+
+    }
+
+}
 	
 	//PBO - 30/10/2013 - Va permettre de gérer l'affichage des différents messages du tutorial et le franchissement des étapes de ces tutorial
 	public void nextMessage(){
 		if(indiceMessage < tutorial.Count){
 			animateWindow();	
-			tutorialText.text = tutorial[indiceMessage].ToString();
+			ShowMessage(tutorialText,tutorial[indiceMessage].ToString());
+
+   
+
+		      
+
+    		
 			indiceMessage++;
 		}
 		else {
@@ -75,8 +147,8 @@ public class GameManager: MonoBehaviour
 					indiceMessage = 0;
 					tutorial = new ArrayList();
 					TimerText.guiText.enabled = true;
-					tutorial.Add("Ah oui... parce que j'ai omis de te dire que ton\nobjectif, c'etait d'atteindre l'arrivee en un minimum\nde temps.");
-					tutorial.Add("Une derniere chose, evidemment, tout le monde,\ndes grand-meres jusqu'aux pigeons prendront un malin\nplaisir a t'empecher d'atteindre cet objectif, donc soit\nprudent et bonne chance!\nC'est partiiiiiiiiiiiiit!");
+					tutorial.Add("Ah oui... parce que j'ai omis de te dire que ton objectif, c'etait d'atteindre l'arrivee en un minimum de temps.");
+					tutorial.Add("Une derniere chose, evidemment, tout le monde, des grand-meres jusqu'aux pigeons prendront un malin plaisir a t'empecher d'atteindre cet objectif, donc soit prudent et bonne chance! C'est partiiiiiiiiiiiiit!");
 					nextMessage();
 				break;
 				case GameState.TutoPhase6:
@@ -103,9 +175,9 @@ public class GameManager: MonoBehaviour
 		state = GameState.TutoPhase5;	
 		indiceMessage = 0;
 		tutorial = new ArrayList();
-		tutorial.Add("HUM... Quelle tuerie!\nComme tu peux le voir, non seulement manger me rend de\nl'energie. Mais en plus il augmente ton score que tu peux\nobserver dans le coin superieur droit de ton ecran.");
-		tutorial.Add("Bon soyons raisonnable un moment...\nLes hamburgers, c'est le must, mais c'est un peu gras...\nFais donc bien attention parce que la barre d'energie en\nprend un coup! Mais ne t'en fais pas, il parait qu'il existe\nd'autres aliments qui ont un impact un peu moins fort\nsur mon taux de cholesterol...");
-		tutorial.Add("Par contre, garde en tete que mon niveau d'energie\ninflue sur ma vitesse de deplacement, plus ce niveau\nsera proche du centre de la barre et plus je me\ndeplacerais vite.");
+		tutorial.Add("HUM... Quelle tuerie! Comme tu peux le voir, non seulement manger me rend de l'energie. Mais en plus il augmente ton score que tu peux observer dans le coin superieur droit de ton ecran.");
+		tutorial.Add("Bon soyons raisonnable un moment... Les hamburgers, c'est le must, mais c'est un peu gras... Fais donc bien attention parce que la barre d'energie en prend un coup! Mais ne t'en fais pas, il parait qu'il existe d'autres aliments qui ont un impact un peu moins fort sur mon taux de cholesterol...");
+		tutorial.Add("Par contre, garde en tete que mon niveau d'energie influe sur ma vitesse de deplacement, plus ce niveau sera proche du centre de la barre et plus je me deplacerais vite.");
 		nextMessage();
 	}
 	
@@ -117,9 +189,11 @@ public class GameManager: MonoBehaviour
 	void Start () 
 	{
 		tutorial = new ArrayList();
-		tutorial.Add("Hey! Bienvenue!\nOn m'avait prevenu que tu allais venir m'epauler!\nLa premiere chose a savoir, c'est que quand tu as finis\nde lire ce que je te dis, il te suffit d'appuyer sur la\n touche \"Espace\" pour passer au message suivant.");
-		tutorial.Add("Bien! On dirait que tu es doue pour suivre les\ninstructions! Bon ok... je te tutoies, mais vu que tu vas\ncontroler mes moindres faits et gestes on est deja des\nintimes non? Allez on va faire encore plus dur! Tu vas\nessayer de me deplacer avec les fleches de ton clavier!");
-		
+		tutorial.Add("Hey! Bienvenue! On m'avait prevenu que tu allais venir m'epauler! La premiere chose a savoir, c'est que quand tu as finis de lire ce que je te dis, il te suffit d'appuyer sur la  touche \"Espace\" pour passer au message suivant.");
+		tutorial.Add("Bien! On dirait que tu es doue pour suivre les instructions! Bon ok... je te tutoies, mais vu que tu vas controler mes moindres faits et gestes on est deja des intimes non? Allez on va faire encore plus dur! Tu vas essayer de me deplacer avec les fleches de ton clavier!");
+		MAXHEIGHT = (int)(Screen.height / 3);
+		lineLength = 1.6f * MAXHEIGHT;
+		tutorialText.fontSize = MAXHEIGHT / 18;
 		nextMessage();
 	}
 	
@@ -162,11 +236,11 @@ public class GameManager: MonoBehaviour
 					state = GameState.TutoPhase3;
 					indiceMessage = 0;
 					tutorial = new ArrayList();
-					tutorial.Add("C'est pas mal... mais j'espere que tu en as encore\n sous le pied parce que ca va se corser... la prochaine chose\nque je vais te demander et qui est primordiale...\nC'EST QUE JE T'INDERDIS DE ME TUER OK?!");
-					tutorial.Add("Tu vois cette barre en haut de ton ecran? C'est mon\nenergie!Si elle se vide completement, je meurs de faim\net si tu la rempli completement, mon estomac eclate!");
-					tutorial.Add("Oui, je sais, je suis un grand sensible...\nMais si je ne l'etais pas, ce jeu n'aurait aucun interet!\nMaintenant qu'on est d'accord, peut passer a la\npartie interessante : la bouffe!");
-					tutorial.Add("Au fil du temps mon energie diminue, tu vas donc devoir\nme procurer de la nourriture pour que je puisse\nsurvivre.");
-					tutorial.Add("Tu vois le truc qui tourne en haut de la route la bas?\nC'est un burger! Et les burger c'est mon kiffe!\nDonc file vite me le chercher avant que je clamse.");
+					tutorial.Add("C'est pas mal... mais j'espere que tu en as encore  sous le pied parce que ca va se corser... la prochaine chose que je vais te demander et qui est primordiale... C'EST QUE JE T'INDERDIS DE ME TUER OK?!");
+					tutorial.Add("Tu vois cette barre en haut de ton ecran? C'est mon energie!Si elle se vide completement, je meurs de faim et si tu la rempli completement, mon estomac eclate!");
+					tutorial.Add("Oui, je sais, je suis un grand sensible... Mais si je ne l'etais pas, ce jeu n'aurait aucun interet! Maintenant qu'on est d'accord, peut passer a la partie interessante : la bouffe!");
+					tutorial.Add("Au fil du temps mon energie diminue, tu vas donc devoir me procurer de la nourriture pour que je puisse survivre.");
+					tutorial.Add("Tu vois le truc qui tourne en haut de la route la bas? C'est un burger! Et les burger c'est mon kiffe! Donc file vite me le chercher avant que je clamse.");
 					nextMessage();
 				}
 				
@@ -174,9 +248,10 @@ public class GameManager: MonoBehaviour
 			case GameState.Game :	
 				int minute = ((int)Timer / 60);
 				int second = (int)(Timer % 60);
+				int milisecond = (int)(Timer * 100 % 100);
 				
 				Timer += Time.deltaTime;
-				TimerText.text = minute + ":" + ((second < 10)?"0":"") + second;
+				TimerText.text = minute + ":" + ((second < 10)?"0":"") + second + ":" + ((milisecond < 10)?"0":"") + milisecond;
 				energy -= 0.015f;
 			break;
 			case GameState.TutoPhase4:
