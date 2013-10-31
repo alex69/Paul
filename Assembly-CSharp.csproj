@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Utilitaires/Unity/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Utilitaires/Unity/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -69,8 +69,6 @@
      <Compile Include="Assets\Script\Camare\SmoothLookAt.cs" />
      <Compile Include="Assets\Script\Coins\Coins.cs" />
      <Compile Include="Assets\Script\GameManager\GameManager.cs" />
-     <Compile Include="Assets\Script\GameManager\Next.cs" />
-     <Compile Include="Assets\Script\GameManager\Previous.cs" />
      <Compile Include="Assets\Script\Menu\BackToMenu.cs" />
      <Compile Include="Assets\Script\Menu\ChooseLevel.cs" />
      <Compile Include="Assets\Script\Menu\Lemodev.cs" />

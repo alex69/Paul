@@ -2,21 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 public class GameManager: MonoBehaviour 
-{	
-	enum GameState
-	{
-		TutoPhase1,
-		TutoPhase2,
-		TutoPhase3,
-		TutoPhase4,
-		TutoPhase5,
-		TutoPhase6,
-		Game,
-		Pause,
-		End
-	}
-	private GameState state  = GameState.TutoPhase1;
-	public GameObject Car;
+{
+	private AudioSource sound;
+	private GameObject Door;
 	private bool won;
 	private bool death;
 	public GUIStyle guiStyle;
@@ -26,6 +14,7 @@ public class GameManager: MonoBehaviour
 	//PBO - 27/10/2013 - Energie comprise entre 0 et 100. La partie est perdue lorsque l'énergie atteint l'une de ses valeurs limite, elle diminue au cours du temps et augmente quand on mange
 	public float energy = 50.0f;
 	public Texture2D EnergyBar;
+<<<<<<< HEAD
 	public ArrayList tutorial;
 	
 	//PBO - 30/10/2013 - Timer
@@ -49,6 +38,8 @@ public class GameManager: MonoBehaviour
 		isFading = true;
 		increment = -50;
 	}
+=======
+>>>>>>> e33191487c417228741580b02830844f3b1a3052
 	
 	public void ShowMessage (GUIText guiText,string text) {
 
@@ -116,6 +107,7 @@ public class GameManager: MonoBehaviour
 
 }
 	
+<<<<<<< HEAD
 	//PBO - 30/10/2013 - Va permettre de gérer l'affichage des différents messages du tutorial et le franchissement des étapes de ces tutorial
 	public void nextMessage(){
 		if(indiceMessage < tutorial.Count){
@@ -161,6 +153,8 @@ public class GameManager: MonoBehaviour
 		
 	}
 	
+=======
+>>>>>>> e33191487c417228741580b02830844f3b1a3052
 	public AudioClip DestroySound;
 	public AudioClip WonSound;
 	public AudioClip EatSound;
@@ -170,6 +164,7 @@ public class GameManager: MonoBehaviour
 	public AudioClip BallJumpSound;
 	public AudioClip BallHitGroundSound;
 	
+<<<<<<< HEAD
 	
 	public void ToEtape5(){
 		state = GameState.TutoPhase5;	
@@ -195,10 +190,15 @@ public class GameManager: MonoBehaviour
 		lineLength = 1.6f * MAXHEIGHT;
 		tutorialText.fontSize = MAXHEIGHT / 18;
 		nextMessage();
+=======
+	void Start () 
+	{
+>>>>>>> e33191487c417228741580b02830844f3b1a3052
 	}
 	
 	void Update()
 	{
+<<<<<<< HEAD
 		if(isFading){
 			if( tutorialWindow.pixelInset.height < MAXHEIGHT || tutorialWindow.pixelInset.height > 0){
 				tutorialWindow.pixelInset = new Rect(0,0,tutorialWindow.pixelInset.width +  2 * increment,tutorialWindow.pixelInset.height +  increment);
@@ -259,6 +259,10 @@ public class GameManager: MonoBehaviour
 				energy -= 0.015f;
 			break;
 		}
+=======
+		//PBO - 27/10/2013 - L'énergie diminue au cours du temps
+		energy -= 0.015f;
+>>>>>>> e33191487c417228741580b02830844f3b1a3052
 	}
 	
 	void OnGUI () 
@@ -327,6 +331,38 @@ public class GameManager: MonoBehaviour
 		
 	}
 	
+
+	
+	public void SpeedBooster()
+    {
+		audio.clip = SpeedBoosterSound;
+		audio.Play();
+	}
+	
+	public void JumpBooster()
+    {
+		audio.clip = JumpBoosterSound;
+		audio.Play();
+	}
+	
+	public void BallJump()
+    {
+		audio.clip = BallJumpSound;
+		audio.Play();
+	}
+	
+	public void BallHitGround()
+    {
+		audio.clip = BallHitGroundSound;
+		audio.Play();
+	}
+	
+	public void Teleporter()
+    {
+		audio.clip = TeleporterSound;
+		audio.Play();
+	}
+	
 	public void Won()
 	{
 		audio.clip = WonSound;
@@ -341,8 +377,4 @@ public class GameManager: MonoBehaviour
 		audio.Play();
 		death = true;
 	}
-
-
-	
-	
 }
